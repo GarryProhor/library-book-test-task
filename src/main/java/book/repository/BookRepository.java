@@ -1,2 +1,18 @@
-package book.repository;public interface BookRepository {
+package book.repository;
+
+import book.model.Book;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+import org.springframework.data.jpa.repository.Query;
+
+import java.util.List;
+
+@Repository
+public interface BookRepository extends JpaRepository<Book, Long> {
+
+    //...
+    List<Book> findByTitleStartingWith(String query);
+
+    @Query(value = "SELECT MAX(e.id) FROM Book e")
+    Long findMaxId();
 }
