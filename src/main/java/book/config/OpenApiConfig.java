@@ -1,20 +1,21 @@
 package book.config;
 
-import book.config.ApplicationConfig;
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Contact;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.info.License;
-import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@RequiredArgsConstructor
 public class OpenApiConfig {
 
     private final ApplicationConfig config;
+
+    public OpenApiConfig(ApplicationConfig config) {
+        this.config = config;
+    }
 
     @Bean
     public OpenAPI customOpenApi(){

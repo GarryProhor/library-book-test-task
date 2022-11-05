@@ -4,7 +4,6 @@ import book.model.Book;
 import book.service.BookService;
 import org.junit.Before;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -23,7 +22,7 @@ class BookServiceTest {
 
     @Before
     public void init() {
-        MockitoAnnotations.initMocks(this);
+        MockitoAnnotations.openMocks(this);
     }
 
     @Test
@@ -51,7 +50,7 @@ class BookServiceTest {
 
         Book book1 = bookService.findOne(1L);
 
-        verify(bookService, times(1)).findOne(1L);
+        verify(bookService, times(1)).findOne(book1.getId());
     }
 
     @Test
@@ -59,9 +58,20 @@ class BookServiceTest {
 
         int date = new Date().getYear();
         Book book = new Book(1L, "Title 1", "Author 1", date);
+
         Book bookCreated = bookService.save(book);
 
-        verify(bookService, times(1)).save(book);
+        verify(bookService, times(1)).save(bookCreated);
+    }
+    @Test
+    public void deleteBookTest() {
+
+        int date = new Date().getYear();
+        Book book = new Book(1L, "Title 1", "Author 1", date);
+
+        when(bookService.findOne(1L)).thenReturn(book);
+
+        verify(bookService, times(1)).delete(1L);
     }
 
 }

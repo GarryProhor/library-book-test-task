@@ -16,7 +16,7 @@ public interface BookService {
 
     Book update(Long id);
 
-    String delete(Long id);
+    void delete(Long id);
 
     List<Book> findAll(boolean sortByYear);
 

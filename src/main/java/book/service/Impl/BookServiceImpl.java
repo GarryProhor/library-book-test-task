@@ -27,14 +27,14 @@ public class BookServiceImpl implements BookService {
 
     @Cacheable("books")
     public Book findOne(Long id) {
-        log.info("Поиск книги с" + id);
+        log.info("Поиск книги с id - " + id);
         return booksRepository.findById(id)
                 .orElseThrow(() -> new BookNotFoundException(id));
     }
 
 
     public List<Book> findAllBooks(){
-        log.info("Поиск книги всех книг");
+        log.info("Поиск всех книг");
         return booksRepository.findAll();
     }
 
@@ -44,23 +44,22 @@ public class BookServiceImpl implements BookService {
 
     @Transactional
     public Book save(Book book) {
-        log.info("Книга" + book.getTitle() + "сохранена");
+        log.info("Книга " + book.getTitle() + " сохранена. Автор книги " + book.getAuthor());
         return booksRepository.save(book);
     }
 
     @Transactional
     public Book update(Long id) {
+        log.info("Редактирование книги - " + id);
         Book book = booksRepository.findById(id).orElseThrow(()-> new BookNotFoundException(id));
         return booksRepository.save(book);
     }
 
     @Transactional
-    public String delete(Long id) {
-        if(!booksRepository.existsById(id)) {
-            throw new BookNotFoundException(id);
-        }
+    public void delete(Long id) {
+        booksRepository.findById(id).orElseThrow(()-> new BookNotFoundException(id));
         booksRepository.deleteById(id);
-        return null;
+        log.info("Книга с id - " + id + " успешно удалена");
     }
 
     public List<Book> findAll(boolean sortByYear) {

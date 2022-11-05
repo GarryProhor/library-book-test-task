@@ -43,7 +43,7 @@ public class BookController {
 
     @PostMapping
     public ResponseEntity<Book> createBook(@Valid @RequestBody Book book) {
-        return  ResponseEntity.ok(bookService.save(book));
+        return new ResponseEntity<>(bookService.save(book), HttpStatus.CREATED);
     }
 
     @PutMapping("{id}")
@@ -52,7 +52,7 @@ public class BookController {
         {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        return  ResponseEntity.ok(bookService.update(id));
+        return new ResponseEntity<>(bookService.update(id), HttpStatus.OK);
     }
 
     @DeleteMapping("{id}")
@@ -60,8 +60,10 @@ public class BookController {
         if (bookService.findOne(id) == null)
         {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }else {
+            bookService.delete(id);
+            return new ResponseEntity<>(HttpStatus.OK);
         }
-        return ResponseEntity.ok(bookService.delete(id));
     }
 }
 
