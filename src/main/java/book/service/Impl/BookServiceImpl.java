@@ -32,14 +32,9 @@ public class BookServiceImpl implements BookService {
                 .orElseThrow(() -> new BookNotFoundException(id));
     }
 
-
     public List<Book> findAllBooks(){
         log.info("Поиск всех книг");
         return booksRepository.findAll();
-    }
-
-    public List<Book> searchByTitle(String query) {
-        return booksRepository.findByTitleStartingWith(query);
     }
 
     @Transactional
@@ -49,10 +44,16 @@ public class BookServiceImpl implements BookService {
     }
 
     @Transactional
-    public Book update(Long id) {
-        log.info("Редактирование книги - " + id);
-        Book book = booksRepository.findById(id).orElseThrow(()-> new BookNotFoundException(id));
-        return booksRepository.save(book);
+    public Book update(Book book) {
+        log.info("Редактирование книги id - " + book.getId());
+        Book bookUpdate = booksRepository.findById(book.getId()).orElseThrow(()-> new BookNotFoundException(book.getId()));
+
+        bookUpdate.setTitle(book.getTitle());
+        bookUpdate.setAuthor(book.getAuthor());
+        bookUpdate.setYear(book.getYear());
+
+        log.info("Редактирование книги c id - " + book.getId() + " прошло успешно");
+        return booksRepository.save(bookUpdate);
     }
 
     @Transactional
@@ -62,6 +63,10 @@ public class BookServiceImpl implements BookService {
         log.info("Книга с id - " + id + " успешно удалена");
     }
 
+    //Продолжение следует... Наверное будет пагинация:)
+    public List<Book> searchByTitle(String query) {
+        return booksRepository.findByTitleStartingWith(query);
+    }
     public List<Book> findAll(boolean sortByYear) {
         if (sortByYear)
             return booksRepository.findAll(Sort.by("years"));

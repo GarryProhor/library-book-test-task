@@ -9,7 +9,6 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -27,10 +26,9 @@ class BookServiceTest {
 
     @Test
     public void getAllBooksTest() {
-        int date = new Date().getYear();
         List<Book> list = new ArrayList<>();
-        list.add(new Book(1L, "Title 1", "Author 1", date));
-        list.add(new Book(2L, "Title 2", "Author 2", date));
+        list.add(new Book(1L, "Title 1", "Author 1", 2022));
+        list.add(new Book(2L, "Title 2", "Author 2", 2021));
 
         when(bookService.findAllBooks()).thenReturn(list);
 
@@ -42,9 +40,7 @@ class BookServiceTest {
 
     @Test
     public void getBookByIdTest() {
-
-        int date = new Date().getYear();
-        Book book = new Book(1L, "Title 1", "Author 1", date);
+        Book book = new Book(1L, "Title 1", "Author 1", 2022);
 
         when(bookService.findOne(1L)).thenReturn(book);
 
@@ -54,24 +50,13 @@ class BookServiceTest {
     }
 
     @Test
-    public void createBookTest() {
+    public void createAndUpdateBookTest() {
+        Book book = new Book(1L, "Title 1", "Author 1", 2022);
+        when(bookService.save(book)).thenReturn(book);
 
-        int date = new Date().getYear();
-        Book book = new Book(1L, "Title 1", "Author 1", date);
-
-        Book bookCreated = bookService.save(book);
-
-        verify(bookService, times(1)).save(bookCreated);
-    }
-    @Test
-    public void deleteBookTest() {
-
-        int date = new Date().getYear();
-        Book book = new Book(1L, "Title 1", "Author 1", date);
-
+        book.setTitle("Title 2");
+        book.setAuthor("Author 2");
+        book.setYear(2021);
         when(bookService.findOne(1L)).thenReturn(book);
-
-        verify(bookService, times(1)).delete(1L);
     }
-
 }
