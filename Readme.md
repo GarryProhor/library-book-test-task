@@ -5,8 +5,9 @@
 Конечные точки (Endpoints)
 1. GET /books
 2. GET /books/{id}
-3. POST /books
-4. PUT /books/{id}
+3. GET /books/author/{author}
+4. POST /books
+5. PUT /books/{id}
 5. DELETE /books/{id}
 
 Дополнительно. 
