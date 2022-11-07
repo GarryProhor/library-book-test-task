@@ -37,6 +37,11 @@ public class BookServiceImpl implements BookService {
         return booksRepository.findAll();
     }
 
+    public List<Book> findByAuthorName(String author){
+        log.info("Все книги - " + author);
+        return booksRepository.findByAuthor(author);
+    }
+
     @Transactional
     public Book save(Book book) {
         log.info("Книга " + book.getTitle() + " сохранена. Автор книги " + book.getAuthor());

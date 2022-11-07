@@ -18,6 +18,8 @@ public interface BookService {
 
     void delete(Long id);
 
+    List<Book> findByAuthorName(String author);
+
     List<Book> findAll(boolean sortByYear);
 
 

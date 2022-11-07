@@ -40,6 +40,15 @@ public class BookController {
         }
         return new ResponseEntity<>(bookService.findAllBooks(), HttpStatus.OK);
     }
+    @GetMapping("author/{author}")
+    public ResponseEntity<List<Book>> getBookByAuthorName(
+            @PathVariable("author") String author){
+        if (bookService.findByAuthorName(author) == null)
+        {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(bookService.findByAuthorName(author), HttpStatus.OK);
+    }
 
     @PostMapping
     public ResponseEntity<Book> createBook(@Valid @RequestBody Book book) {
