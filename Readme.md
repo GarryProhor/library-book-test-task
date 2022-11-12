@@ -11,7 +11,9 @@
 5. DELETE /books/{id}
 
 Дополнительно. 
+
 Реализован простой UI на ReactJS, его можно мосмотреть по сслыке https://github.com/GarryProhor/library-book-test-task-frontend.git
+Реализация проекта при помощи Spring WebFlux, его можно мосмотреть по сслыке https://github.com/GarryProhor/library-book-reactive-test-task.git
 
 Тестовое задание
 
