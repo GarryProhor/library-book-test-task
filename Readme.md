@@ -13,6 +13,8 @@
 Дополнительно. 
 
 Реализован простой UI на ReactJS, его можно мосмотреть по сслыке https://github.com/GarryProhor/library-book-test-task-frontend.git
+Использовались react, react-router-dom, axios, bootstrap
+
 Реализация проекта при помощи Spring WebFlux, его можно мосмотреть по сслыке https://github.com/GarryProhor/library-book-reactive-test-task.git
 Использовались Spring WebFlux, Spring Data R2BDC, R2DBC-H2, H2, Lombok, Model Mapper
 
