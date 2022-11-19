@@ -1,6 +1,6 @@
 Описание
 
-В этом проекте CRUD API реализован с использованием Spring Boot, Hibernate, JDBC, H2, Swagger UI, Maven, написаны тесты Service слоя.
+В этом проекте CRUD API реализован с использованием Spring Boot, Data JPA, AOP, H2, Swagger UI, Maven, написаны тесты Service слоя.
 
 Конечные точки (Endpoints)
 1. GET /books
