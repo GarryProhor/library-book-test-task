@@ -1,9 +1,10 @@
 package book.service.Impl;
 
-import book.exception.BookNotFoundException;
 import book.model.Book;
 import book.repository.BookRepository;
 import book.service.BookService;
+import book.util.CustomResponse;
+import book.util.CustomStatus;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
@@ -13,6 +14,8 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Slf4j
 @Service
@@ -26,44 +29,41 @@ public class BookServiceImpl implements BookService {
     }
 
     @Cacheable("books")
-    public Book findOne(Long id) {
-        log.info("Поиск книги с id - " + id);
-        return booksRepository.findById(id)
-                .orElseThrow(() -> new BookNotFoundException(id));
+    public CustomResponse<Book> findOne(Long id) {
+        Book book = booksRepository.findById(id).orElseThrow();
+        return new CustomResponse<>(Stream.of(book).collect(Collectors.toList()), CustomStatus.SUCCESS);
     }
 
-    public List<Book> findAllBooks(){
-        log.info("Поиск всех книг");
-        return booksRepository.findAll();
+    public CustomResponse<Book> findAllBooks(){
+        List<Book> books = booksRepository.findAll();
+        return new CustomResponse<>(books, CustomStatus.SUCCESS);
     }
 
-    public List<Book> findByAuthorName(String author){
-        log.info("Все книги - " + author);
-        return booksRepository.findByAuthor(author);
-    }
 
-    @Transactional
-    public Book save(Book book) {
-        log.info("Книга " + book.getTitle() + " сохранена. Автор книги " + book.getAuthor());
-        return booksRepository.save(book);
+    public CustomResponse<Book> findByAuthorName(String author){
+        Book book = booksRepository.findByAuthor(author).orElseThrow();
+        return new CustomResponse<>(Stream.of(book).collect(Collectors.toList()), CustomStatus.SUCCESS);
     }
 
     @Transactional
-    public Book update(Book book) {
-        log.info("Редактирование книги id - " + book.getId());
-        Book bookUpdate = booksRepository.findById(book.getId()).orElseThrow(()-> new BookNotFoundException(book.getId()));
+    public CustomResponse<Book> addBook(Book book) {
+        Book newBook = booksRepository.save(book);
+        return new CustomResponse<>(Stream.of(newBook).collect(Collectors.toList()), CustomStatus.SUCCESS);
+    }
 
-        bookUpdate.setTitle(book.getTitle());
-        bookUpdate.setAuthor(book.getAuthor());
-        bookUpdate.setYear(book.getYear());
-
-        log.info("Редактирование книги c id - " + book.getId() + " прошло успешно");
-        return booksRepository.save(bookUpdate);
+    @Transactional
+    public CustomResponse<Book> update(Book book) {
+        Book bookFound = booksRepository.findById(book.getId()).orElseThrow();
+        bookFound.setTitle(book.getTitle());
+        bookFound.setAuthor(book.getAuthor());
+        bookFound.setYear(book.getYear());
+        Book bookUpdate = booksRepository.save(bookFound);
+        return new CustomResponse<>(Stream.of(bookUpdate).collect(Collectors.toList()), CustomStatus.SUCCESS);
     }
 
     @Transactional
     public void delete(Long id) {
-        booksRepository.findById(id).orElseThrow(()-> new BookNotFoundException(id));
+        booksRepository.findById(id).orElseThrow();
         booksRepository.deleteById(id);
         log.info("Книга с id - " + id + " успешно удалена");
     }
@@ -73,16 +73,11 @@ public class BookServiceImpl implements BookService {
         return booksRepository.findByTitleStartingWith(query);
     }
     public List<Book> findAll(boolean sortByYear) {
-        if (sortByYear)
-            return booksRepository.findAll(Sort.by("years"));
-        else
-            return booksRepository.findAll();
+        return sortByYear ? booksRepository.findAll(Sort.by("years")) : booksRepository.findAll();
     }
 
     public List<Book> findWithPagination(Integer page, Integer booksPerPage, boolean sortByYear) {
-        if (sortByYear)
-            return booksRepository.findAll(PageRequest.of(page, booksPerPage, Sort.by("years"))).getContent();
-        else
-            return booksRepository.findAll(PageRequest.of(page, booksPerPage)).getContent();
+        return sortByYear ? booksRepository.findAll(PageRequest.of(page, booksPerPage, Sort.by("years"))).getContent()
+               : booksRepository.findAll(PageRequest.of(page, booksPerPage)).getContent();
     }
 }

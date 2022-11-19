@@ -2,6 +2,7 @@ package book.controller;
 
 import book.model.Book;
 import book.service.BookService;
+import book.util.CustomResponse;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,44 +25,29 @@ public class BookController {
 
     @GetMapping("{id}")
     public @ResponseBody
-    HttpEntity<?> getBooksById(@PathVariable Long id) {
-        if (bookService.findOne(id) == null)
-        {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        return new ResponseEntity<>(bookService.findOne(id), HttpStatus.OK);
+    CustomResponse<Book> getBooksById(@PathVariable Long id) {
+        return bookService.findOne(id);
     }
 
     @GetMapping
-    public ResponseEntity<List<Book>> getBooks(){
-        if (bookService.findAllBooks() == null)
-        {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        return new ResponseEntity<>(bookService.findAllBooks(), HttpStatus.OK);
+    public CustomResponse<Book> getBooks(){
+        return bookService.findAllBooks();
     }
+
     @GetMapping("author/{author}")
-    public ResponseEntity<List<Book>> getBookByAuthorName(
+    public CustomResponse<Book> getBookByAuthorName(
             @PathVariable("author") String author){
-        if (bookService.findByAuthorName(author) == null)
-        {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        return new ResponseEntity<>(bookService.findByAuthorName(author), HttpStatus.OK);
+        return bookService.findByAuthorName(author);
     }
 
     @PostMapping
-    public ResponseEntity<Book> createBook(@Valid @RequestBody Book book) {
-        return new ResponseEntity<>(bookService.save(book), HttpStatus.CREATED);
+    public CustomResponse<Book> createBook(@Valid @RequestBody Book book) {
+        return bookService.addBook(book);
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<Book> updateBook(@Valid @RequestBody Book book) {
-        if (bookService.findOne(book.getId()) == null)
-        {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        return new ResponseEntity<>(bookService.update(book), HttpStatus.OK);
+    public CustomResponse<Book> updateBook(@Valid @RequestBody Book book) {
+               return bookService.update(book);
     }
 
     @DeleteMapping("{id}")

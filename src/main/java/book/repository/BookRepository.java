@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface BookRepository extends JpaRepository<Book, Long> {
@@ -12,9 +13,6 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     //...
     List<Book> findByTitleStartingWith(String query);
 
-//    @Query(value = "SELECT * FROM book WHERE author = ?")
-    List<Book> findByAuthor(String author);
-
-//    @Query(value = "SELECT MAX(e.id) FROM Book e")
-//    Long findMaxId();
+    //    @Query(value = "SELECT * FROM book WHERE author = ?")
+    Optional<Book> findByAuthor(String author);
 }

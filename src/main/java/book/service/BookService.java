@@ -1,6 +1,7 @@
 package book.service;
 
 import book.model.Book;
+import book.util.CustomResponse;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -8,17 +9,17 @@ import java.util.List;
 @Service
 public interface BookService {
 
-    Book findOne(Long id);
+    CustomResponse<Book> findOne(Long id);
 
-    List<Book> findAllBooks();
+    CustomResponse<Book> findAllBooks();
 
-    Book save(Book book);
+    CustomResponse<Book> addBook(Book book);
 
-    Book update(Book book);
+    CustomResponse<Book> update(Book book);
 
     void delete(Long id);
 
-    List<Book> findByAuthorName(String author);
+    CustomResponse<Book> findByAuthorName(String author);
 
     List<Book> findAll(boolean sortByYear);
 
